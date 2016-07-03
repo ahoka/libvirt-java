@@ -2,7 +2,6 @@ package org.libvirt;
 
 import org.libvirt.event.*;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.util.Arrays;
@@ -29,10 +28,12 @@ public final class TestJavaBindings extends TestCase {
         }
     }
 
+    @Override
     protected void setUp() throws LibvirtException {
         conn = new Connect("test:///default", false);
     }
 
+    @Override
     protected void tearDown() throws LibvirtException {
         conn.close();
         conn = null;
@@ -255,7 +256,7 @@ public final class TestJavaBindings extends TestCase {
     }
 
     public void testDomainEvents() throws Exception {
-        final List<DomainEventType> events = new ArrayList<DomainEventType>();
+        final List<DomainEventType> events = new ArrayList<>();
         final Thread t = new Thread() {
                 @Override
                 public void run() {
@@ -270,15 +271,12 @@ public final class TestJavaBindings extends TestCase {
         t.setDaemon(true);
         t.start();
 
-        LifecycleListener listener = new LifecycleListener() {
-            @Override
-            public int onLifecycleChange(Domain d, DomainEvent e)
-            {
-                events.add(e.getType());
+        LifecycleListener listener = (Domain d, DomainEvent e) -> {
+            events.add(e.getType());
 
-                return 0;
-            }
+            return 0;
         };
+
         try {
             conn.addLifecycleListener(listener);
 
