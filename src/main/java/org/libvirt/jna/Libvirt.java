@@ -1,7 +1,5 @@
 package org.libvirt.jna;
 
-import java.nio.ByteBuffer;
-
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -10,6 +8,7 @@ import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
+import java.nio.ByteBuffer;
 
 /**
  * The libvirt interface which is exposed via JNA. The complete API is
@@ -334,6 +333,7 @@ public interface Libvirt extends Library {
     NetworkPointer virNetworkLookupByUUIDString(ConnectionPointer virConnectPtr, String uuidstr);
     int virNetworkSetAutostart(NetworkPointer virConnectPtr, int autoStart);
     int virNetworkUndefine(NetworkPointer virConnectPtr);
+    int	virNetworkUpdate(NetworkPointer network, int command, int section, int parentIndex, String xml, int flags);
 
     // Node functions
     int virNodeGetInfo(ConnectionPointer virConnectPtr, virNodeInfo virNodeInfo);
